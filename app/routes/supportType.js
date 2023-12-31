@@ -18,16 +18,12 @@ router.put('/:id', supportType.UpdateSupportType);
 //Soft  Delete an enquiry by ID
 router.patch('/:id',supportType.softDelete);
 
-// Search 
-router.get('/search/:keyword',supportType.searchSupportType);
-
-//get count
-
-router.get('/support-count',supportType.findTotalSupportCount);
-
-
 
 // Get a single enquiry by ID
 router.get('/:id', supportType.GetSingleSupportType);
+
+
+// Search
+router.get('/key/search', supportType.searchSupportType);
 
 module.exports = router;

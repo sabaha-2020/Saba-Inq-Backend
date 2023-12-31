@@ -5,16 +5,16 @@ const Product = require("../models/productServices");
 // Create User
 exports.CreateProduct = async (req, res) => {
     try {
-      const { name,descp,isActive} = req.body;
+      const { name,descp} = req.body;
 
      
   
     const product = await new Product({ 
       name,
       descp,
-      isActive: Boolean(isActive) ,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      status: 'new',
+      createdAt: new Date(),
+      updatedAt: new Date(),
       createdBy: 'admin',
       updatedBy: 'admin',
       isDeleted: false
@@ -39,7 +39,7 @@ exports.CreateProduct = async (req, res) => {
 // Get all Users
 exports.GetAllProduct = async (req, res) => {
     try {
-      const product = await Product.find().sort({ createdAt :-1})  
+      const product = await Product.find({isDeleted:false}).sort({ createdAt :-1})  
       .populate('createdBy')
       .populate('updatedBy') ;
       res.status(200).send({
@@ -167,5 +167,32 @@ exports.softDelete= async (req, res) => {
   }
 };
 
+//search
 
+exports.searchProduct = async(req,res)=>{
+  try {
+     
+      const {keyword} = req.query;
 
+      const results = await Product.find({
+        $and: [
+          {isDeleted: false},
+         { $or:[
+          { name: { $regex: new RegExp(keyword, 'i') } },  
+          { descp: { $regex: new RegExp(keyword, 'i') } },]}
+        ] , }).sort({ createdAt: -1 });
+
+      res.status(200).send({
+        success: true,
+        results,
+      });
+
+  } catch (error) {
+      console.log(error);
+      res.status(400).send({
+        success: false,
+        message: "error in per page ctrl",
+        error,
+      });
+  }
+}

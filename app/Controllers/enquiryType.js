@@ -21,6 +21,7 @@ exports.CreateEnquiryType = async (req, res) => {
     const enquiryType = await new EnquiryType({
       name,
       descp,
+      status: 'new',
       createdBy :'admin',
       updatedBy :'admin',
       createdAt: new Date().toISOString(),
@@ -79,7 +80,7 @@ exports.UpdateEnquiryType = async (req, res) => {
 // Get all EnquiryTypes
 exports.GetAllEnquiryTypes = async (req, res) => {
   try {
-    const enquiryType = await EnquiryType.find().sort({createdAt:-1});
+    const enquiryType = await EnquiryType.find({isDeleted:false}).sort({createdAt:-1});
     res.status(200).send({
       success: true,
       message: "All EnquiryTypes",
@@ -145,3 +146,36 @@ exports.softDeleteEnquiryType = async (req, res) => {
     });
   }
 };
+
+
+
+//search
+
+exports.searchEnquiryType = async(req,res)=>{
+  try {
+     
+      const {keyword} = req.query;
+
+      const results = await EnquiryType.find({
+        $and: [
+          {isDeleted: false},
+         { $or:[
+          { name: { $regex: new RegExp(keyword, 'i') } },  
+          { descp: { $regex: new RegExp(keyword, 'i') } },]}
+        ] , }).sort({ createdAt: -1 });
+
+      res.status(200).send({
+        success: true,
+        results,
+      });
+
+  } catch (error) {
+      console.log(error);
+      res.status(400).send({
+        success: false,
+        message: "error in per page ctrl",
+        error,
+      });
+  }
+}
+

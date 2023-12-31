@@ -14,21 +14,11 @@ router.get('/', enquirySupport.GetAllEnquirySupport);
 router.put('/:id', enquirySupport.UpdateEnquirySupport);
 
 
-
-// Delete an enquiry by ID
-//router.delete('/:id',enquirySupport.DeleteEnquirySupport);
-
-
 //Soft  Delete an enquiry by ID
 router.patch('/:id',enquirySupport.softDelete);
 
-// Search 
-router.get('/search/:keyword',enquirySupport.searchEnquirySupportController);
-
-//get count
-
-router.get('/support-count',enquirySupport.findTotalSupportCount);
-
+// SearchProductServices
+router.get('/key/search', enquirySupport.searchSupport);
 
 
 // Get a single enquiry by ID

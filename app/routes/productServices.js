@@ -20,4 +20,8 @@ router.patch('/:id', ProductServices.softDelete);
 // Get a single organization category by ID
 router.get('/:id', ProductServices.GetSingleProduct);
 
+
+// SearchProductServices
+router.get('/key/search', ProductServices.searchProduct);
+
 module.exports = router;

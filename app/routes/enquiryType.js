@@ -18,4 +18,7 @@ router.get("/:id", enquiryTypeController.GetSingleEnquiryType);
 // Soft-delete an organization category by ID
 router.patch("/:id", enquiryTypeController.softDeleteEnquiryType);
 
+// Search
+router.get('/key/search', enquiryTypeController.searchEnquiryType);
+
 module.exports = router;
